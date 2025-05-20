@@ -1,0 +1,43 @@
+# Problem: Creating Keys for StORages Has Become My Main Skill - https://codeforces.com/contest/2072/problem/C
+
+#include <bits/stdc++.h>
+#include <vector>
+using namespace std;
+
+#define ll long long
+#define int long long
+
+void solve() {
+    int n, k; cin >> n >> k;
+    vector<int> ans(n, 0);
+
+    int cur_or = 0;
+    int ar_idx = 0;
+    for (int i = 0; i < n; i++) {
+        if ((k | i) != k) continue;
+        ans[ar_idx] = i;
+        ar_idx++;
+        cur_or |= i;
+    }
+
+
+    if (cur_or != k) ans[n - 1] = k;
+
+    cout << ans[0];
+    for (int i = 1; i < n; i++) {
+        cout << " " << ans[i];
+    }
+    cout << "\n";
+}
+
+int32_t main()
+{
+    int tc = 1;
+    cin >> tc;
+
+	while(tc--){
+		solve();
+	}
+
+	return 0;
+}
