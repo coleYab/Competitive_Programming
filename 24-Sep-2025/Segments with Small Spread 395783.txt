@@ -1,0 +1,37 @@
+# Problem: Segments with Small Spread - https://codeforces.com/edu/course/2/lesson/9/2/practice/contest/307093/problem/F
+
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+
+    deque<int> dqmax, dqmin;
+    int ans = 0;
+    int l = 0;
+
+    for (int r = 0; r < n; r++) {
+        while (!dqmax.empty() && a[dqmax.back()] <= a[r]) dqmax.pop_back();
+        dqmax.push_back(r);
+
+        while (!dqmin.empty() && a[dqmin.back()] >= a[r]) dqmin.pop_back();
+        dqmin.push_back(r);
+
+        while (!dqmax.empty() && !dqmin.empty() && a[dqmax.front()] - a[dqmin.front()] > k) {
+            if (dqmax.front() == l) dqmax.pop_front();
+            if (dqmin.front() == l) dqmin.pop_front();
+            l++;
+        }
+        ans += l;  
+    }
+
+    // cout << ans << endl;
+    cout << ((n * (n + 1)) / 2) - ans << "\n";
+}
