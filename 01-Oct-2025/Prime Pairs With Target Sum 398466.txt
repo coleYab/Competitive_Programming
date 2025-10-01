@@ -1,0 +1,26 @@
+# Problem: Prime Pairs With Target Sum - https://leetcode.com/problems/prime-pairs-with-target-sum/description/
+
+class Solution {
+public:
+    vector<vector<int>> findPrimePairs(int n) {
+        vector<vector<int>> ans;
+        vector<int> seive(n + 10, true);
+        seive[0] = false;
+        seive[1] = false;
+
+        for (int i = 2; i <= n; i++) {
+            if (!seive[i]) continue;
+            for (int j = i + i; j <= n; j += i) seive[j] = false;
+        }
+
+        for (int i = 1; i < n; i++) {
+            if (!seive[i]) continue;
+            int diff = n - i;
+            if (diff < i) break;
+            if (!seive[diff]) continue;
+            ans.push_back({i, diff});
+        }
+
+        return ans;
+    }
+};
