@@ -1,0 +1,23 @@
+# Problem: Perfect Squares - https://leetcode.com/problems/perfect-squares/
+
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> coins;
+        for (int i = 1; true; i++) {
+            if (i * i > n) break;
+            coins.push_back(i * i);
+        }
+
+        vector<int> dp(n + 1, 1e9);
+        dp[0] = 0;
+        for (int i = 0; i <= n; i++) {
+            for (auto c : coins) {
+                if (i - c < 0) continue;
+                dp[i] = min(dp[i], dp[i - c] + 1);
+            }
+        }
+
+        return dp[n];
+    }
+};
