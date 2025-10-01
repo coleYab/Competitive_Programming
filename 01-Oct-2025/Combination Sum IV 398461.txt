@@ -1,0 +1,16 @@
+# Problem: Combination Sum IV - https://leetcode.com/problems/combination-sum-iv/description/
+
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        vector<unsigned long long> dp(target + 1, 0LL);
+        dp[0] = 1LL;
+        for (int i = 1; i <= target; i++) {
+            for (auto c : nums) {
+                if (i - c >= 0) dp[i] += dp[i - c];
+            }
+        }
+        return dp[target];
+    }
+};
