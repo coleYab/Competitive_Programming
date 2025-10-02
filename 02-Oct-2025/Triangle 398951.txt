@@ -1,0 +1,24 @@
+# Problem: Triangle - https://leetcode.com/problems/triangle/
+
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& t) {
+        int n = t.size();
+        vector<int> dp = t.back();
+        int idx = n - 1; 
+        int ans = 0;
+
+        while (idx > 0) {
+            vector<int> ndp = t[idx - 1];
+            
+            for (int i = 0; i < ndp.size(); i++) {
+                ndp[i] += min(dp[i], dp[i + 1]);
+            }
+
+            dp = ndp;
+            idx--;
+        }
+
+        return dp.back();
+    }
+};
