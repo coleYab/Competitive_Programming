@@ -1,0 +1,23 @@
+# Problem: Longest Arithmetic Subsequence of Given Difference - https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/description/
+
+
+class Solution {
+public:
+    int longestSubsequence(vector<int> arr, int difference) {
+        int ans = 0;
+        vector<int> dp(2e5 + 300, 0);
+        for (auto &it : arr) {
+            it += 1e5;
+        }
+
+        for (auto it : arr) {
+            int l = it - difference;
+            if (l < 0) continue;
+            // cout << it << " ";
+            dp[it] = max(dp[it], dp[l] + 1);
+            ans = max(dp[it], ans);
+        }
+
+        return ans;
+    }
+};
