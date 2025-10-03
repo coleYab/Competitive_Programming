@@ -1,0 +1,24 @@
+# Problem: Solving Questions With Brainpower - https://leetcode.com/problems/solving-questions-with-brainpower/
+
+#define ll long long
+
+class Solution {
+public:
+    long long mostPoints(vector<vector<int>>& q) {
+        map<int, ll> dp;
+        int n = q.size();
+        
+        auto dfs = [&](auto &&self, int idx) -> ll {
+            if (idx >= n) return 0LL;
+            if (dp.find(idx) != dp.end()) return dp[idx];
+            int take = q[idx][0], nidx = idx + q[idx][1];
+            ll ans = self(self, nidx + 1) + take;
+            ans = max(ans, self(self, idx + 1));
+            dp[idx] = ans;
+            return ans;
+        };
+
+        // cout << dfs(dfs, 0) << endl;
+        return dfs(dfs, 0);
+    }
+};
