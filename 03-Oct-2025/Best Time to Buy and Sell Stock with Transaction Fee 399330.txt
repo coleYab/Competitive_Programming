@@ -1,0 +1,27 @@
+# Problem: Best Time to Buy and Sell Stock with Transaction Fee - https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& a, int fee) {
+        int n = a.size();
+        vector<vector<int>> dp(n, vector<int>(2, -1));
+
+        auto dfs = [&](auto &&self, int idx, bool ok) -> int {
+            int ans = 0;
+            if (idx >= n) return 0;
+            if (dp[idx][ok] != -1) return dp[idx][ok];
+            if (ok) {
+                ans = max(ans, -(a[idx] + fee) + self(self, idx + 1, false));
+                ans = max(ans, self(self, idx + 1, true));
+            } else {
+                ans = max(ans, a[idx] + self(self, idx + 1, true));
+                ans = max(ans, self(self, idx + 1, false));
+            }
+            return dp[idx][ok] = ans;
+            // return dp[state] = ans;
+        };
+
+        return dfs(dfs, 0, true);
+    }
+};
