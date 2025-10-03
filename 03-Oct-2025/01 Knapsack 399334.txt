@@ -1,0 +1,24 @@
+# Problem: 01 Knapsack - https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1
+
+using namespace std;
+
+class Solution {
+  public:
+    int knapsack(int W, vector<int> &val, vector<int> &wt) {
+        int n = val.size();
+        vector<vector<int>> dp(n, vector<int>(W + 1, -1));
+        
+        auto dfs = [&](auto &&self, int idx, int W) {
+            if (W == 0 || idx >= n) return 0;
+            // test skip
+            if (dp[idx][W] != -1) return dp[idx][W];
+            int ans = self(self, idx + 1, W);
+            if (wt[idx] <= W) {
+                ans = max(ans, self(self, idx + 1, W - wt[idx]) + val[idx]);
+            }
+            return dp[idx][W] = ans;
+        };
+            
+        return dfs(dfs, 0, W);   
+    }
+};
