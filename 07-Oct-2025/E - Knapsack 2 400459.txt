@@ -1,0 +1,53 @@
+# Problem: E - Knapsack 2 - https://atcoder.jp/contests/dp/tasks/dp_e
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// #define multi
+#define int long long
+
+const int mxint = 1e18 + 10;
+
+struct test {
+    void solve() {
+        int n, rw; cin >> n >> rw;
+        vector<int> w(n), v(n);
+        int v_tot = 0;
+        for (int i = 0; i < n; i++) {
+            cin >> w[i];
+            cin >> v[i];
+            v_tot += v[i];
+        }
+
+        vector<int> dp(v_tot + 1, mxint);
+        dp[0] = 0L;
+
+        for (int i = 0; i < n; i++) {
+            for (int val = v_tot - v[i]; val >= 0; val--) {
+                dp[val + v[i]] = min(dp[val + v[i]], dp[val] + w[i]);
+            }
+        }
+
+        int ans = 0;
+        for (int i = 0 ; i <= v_tot; i++) {
+            if (dp[i] <= rw) {
+                ans = max(i, ans);
+            }
+        }
+        cout << ans << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int tt = 1;
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+
