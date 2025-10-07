@@ -1,0 +1,42 @@
+# Problem: C - Vacation - https://atcoder.jp/contests/dp/tasks/dp_c
+
+#include <algorithm>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// #define multi
+#define int long long
+
+struct test {
+    void solve() {
+        int n; cin >> n;
+        vector<array<int, 3>> a(n), dp(n + 1);
+        for (auto &it : a) 
+            cin >> it[0] >> it[1] >> it[2];
+        dp[0] = {0, 0, 0};
+        
+
+        for (int i = 0; i < n; i++) {
+            dp[i + 1][0] = a[i][0] + max(dp[i][1], dp[i][2]);
+            dp[i + 1][1] = a[i][1] + max(dp[i][0], dp[i][2]);
+            dp[i + 1][2] = a[i][2] + max(dp[i][0], dp[i][1]);
+        }
+
+        auto back = dp.back();
+        cout << *max_element(back.begin(), back.end()) << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int tt = 1;
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+
