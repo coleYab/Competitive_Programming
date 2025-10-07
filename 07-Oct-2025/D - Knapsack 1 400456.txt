@@ -1,0 +1,31 @@
+# Problem: D - Knapsack 1 - https://atcoder.jp/contests/dp/tasks/dp_d
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using i64 = int64_t;
+
+void solve() {
+    i64 n, m; cin >> n >> m;
+    i64 ans = 0;
+    vector<vector<i64>> dp(n + 1, vector<i64>(m + 1, 0));
+
+    for (int i = 1; i <= n; i++) {
+        int w, p; cin >> w >> p;
+        for (int j = 1; j <= m; j++) {
+            if (j - w >= 0) {
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w] + p);
+            } else {
+                dp[i][j] = dp[i - 1][j];
+            }
+            ans = max(ans, dp[i][j]);
+        }
+    }
+
+    cout << ans << "\n";
+}
+
+int main() {
+     solve();
+}
