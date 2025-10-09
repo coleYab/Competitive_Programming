@@ -1,0 +1,65 @@
+# Problem: Divide and equalize - https://codeforces.com/problemset/problem/1881/D
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define multi
+#define int long long
+
+const int mxn = 1e6+100;
+vector<bool> primes(mxn, true);
+vector<map<int, int>> factors(mxn);
+void init() {
+    for (int i = 2; i < mxn; i++) {
+        if (!primes[i]) continue;
+        for (int j = i; j < mxn; j += i) {
+            primes[j] = false;
+            int cur = i, cnt = 1;
+            while (!(j % cur)) {
+                cur *= i;
+                cnt++;
+            }
+            factors[j][i] = cnt - 1;
+        }
+        primes[i] = true;
+    }
+}
+
+int wrap(int x) {
+    return (x ^ ((1 << 30) - 1));
+}
+
+struct test {
+    void solve() {
+        int n; cin >> n;
+        vector<int> a(n);
+        for (auto &it : a) cin >> it;
+        map<int, int> mp;
+        for (auto it : a) {
+            for (auto k : factors[it]) {
+                if (k.second) mp[wrap(k.first)] += k.second;
+            }
+        }
+
+        bool ok = true;
+        for (auto it : mp) {
+            if (it.second % n) ok = false;
+        }
+        cout << (ok ? "YES" : "NO") << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int tt = 1;
+    init();
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+
