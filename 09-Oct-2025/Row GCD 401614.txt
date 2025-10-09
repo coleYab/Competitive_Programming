@@ -1,0 +1,45 @@
+# Problem: Row GCD - https://codeforces.com/problemset/problem/1458/a
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// #define multi
+#define int long long
+
+struct test {
+    void solve() {
+        int n, m; cin >> n >> m;
+        vector<int> a(n), b(m);
+        for (auto &it : a) cin >> it;
+        for (auto &it : b) cin >> it;
+
+        vector<int> c;
+        sort(a.begin(), a.end());
+        for (int i = 1; i < n; i++) {
+            c.push_back(a[i] - a[i - 1]);
+        }
+
+        sort(c.begin(), c.end());
+        int g = 0;
+        for (auto x : c) g = __gcd(g, x);
+        for (auto q : b) {
+            int k = q + a[0];
+            cout << __gcd(k, g) << " ";
+        }
+        cout << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int tt = 1;
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+
