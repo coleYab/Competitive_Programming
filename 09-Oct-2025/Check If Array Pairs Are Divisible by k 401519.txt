@@ -1,0 +1,23 @@
+# Problem: Check If Array Pairs Are Divisible by k - https://leetcode.com/problems/check-if-array-pairs-are-divisible-by-k/
+
+class Solution {
+public:
+    bool canArrange(vector<int>& arr, int k) {
+        vector<int> a(k);
+        for (auto it : arr) {
+            int c = (it % k);
+            c += k;
+            c = c % k;
+            a[c]++;
+        }   
+        bool ok = true;
+
+        for (int i = 1; i < k; i++) {
+            int ot = k - i;
+            if ((a[ot] != a[i])) ok = false;
+        }
+
+        ok = ok && (a[0] % 2 == 0);
+        return ok;
+    }
+};
