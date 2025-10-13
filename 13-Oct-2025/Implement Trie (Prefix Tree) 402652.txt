@@ -1,0 +1,59 @@
+# Problem: Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
+
+struct TrieNode {
+    TrieNode() {
+        chs = vector<TrieNode*>(26, nullptr);
+        end = false;
+    }
+    vector<TrieNode*> chs;
+    bool end;
+};
+
+class Trie {
+public:
+    TrieNode *root;
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(string word) {
+        TrieNode *rt = root;
+        int n = word.size();
+        for (int i = 0; i < n; i++) {
+            int ii = word[i] - 'a';
+            if (!rt->chs[ii]) rt->chs[ii] = new TrieNode();
+            rt = rt->chs[ii];
+        }
+        rt->end = true;    
+    }
+    
+    bool search(string word) {
+        int n = word.size();
+        TrieNode *rt = root;
+        for (int i = 0; i < n; i++) {
+            int ii = word[i] - 'a';
+            if (!rt->chs[ii]) return false;
+            rt = rt->chs[ii];
+        }
+        return rt->end;  
+    }
+    
+    bool startsWith(string p) {
+        int n = p.size();
+        TrieNode *rt = root;
+        for (int i = 0; i < n; i++) {
+            int ii = p[i] - 'a';
+            if (!rt->chs[ii]) return false;
+            rt = rt->chs[ii];
+        }
+        return true;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
