@@ -1,0 +1,57 @@
+# Problem: Design Add and Search Words Data Structure - https://leetcode.com/problems/design-add-and-search-words-data-structure/
+
+struct N {
+    vector<N*> c;
+    bool end;
+
+    N() {
+        c.assign(27, nullptr);
+        end = false;
+    }
+};
+
+class WordDictionary {
+public:
+    N *root;
+    WordDictionary() {
+        root = new N();
+    }
+    
+    void addWord(string w) {
+        N *rt = root;
+        int n = w.size();
+        for (int i = 0; i < n; i++) {
+            int cur = w[i] == '.' ? 26 : w[i] - 'a';
+            if (!rt->c[cur]) rt->c[cur] = new N();
+            rt = rt->c[cur];
+        }
+        rt->end = true;
+    }
+    
+    bool search(string w) {
+        int n = w.size();
+        auto dfs = [&](auto &&self, N *rt, int idx) {
+            if (idx >= n) return rt && rt->end;
+            if (!rt) return false;
+            int cnt = w[idx] - 'a';
+            if (w[idx] == '.') {
+                bool ok = false;
+                for (int i = 0; i < 26; i++) {
+                    if (rt->c[i]) ok = ok || self(self, rt->c[i], idx + 1);
+                }
+                return ok;
+            } 
+                if (!rt->c[cnt]) return false;
+                return self(self, rt->c[cnt], idx + 1);
+        };
+
+        return dfs(dfs, root, 0);
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
