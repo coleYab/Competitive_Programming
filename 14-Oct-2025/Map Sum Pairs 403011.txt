@@ -1,0 +1,47 @@
+# Problem: Map Sum Pairs - https://leetcode.com/problems/map-sum-pairs/description/
+
+
+struct Node {
+    
+    Node() {
+        chs.assign(26, nullptr);
+        tot = 0;
+    }  
+    int tot = 0;
+    vector<Node*> chs;
+};
+class MapSum {
+public:
+    Node *root;
+    map<string, int> mapping;
+    MapSum() {
+        root = new Node();
+    }
+    
+    void insert(string key, int val) {
+        int p = mapping[key];
+        mapping[key] = val;
+        val -= p;
+        Node *rt = root;
+        int n = key.size();
+        for (int i = 0; i < n; i++) {
+            int c = key[i] - 'a';
+            if (!rt->chs[c]) rt->chs[c] = new Node();
+            rt->tot += val;
+            rt = rt->chs[c];
+        }
+        rt->tot += val;
+    }
+    
+    int sum(string prefix) {
+        Node *rt = root;
+        int n = prefix.size();
+        for (int i = 0; i < n; i++) {
+            int c = prefix[i] - 'a';
+            if (!rt->chs[c]) return 0;
+            rt = rt->chs[c];
+        }
+
+        return rt->tot;
+    }
+};
