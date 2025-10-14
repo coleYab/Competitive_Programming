@@ -1,0 +1,85 @@
+# Problem: Replace Words - https://leetcode.com/problems/replace-words/
+
+
+struct TrieNode {
+    TrieNode() {
+        chs = vector<TrieNode*>(26, nullptr);
+        end = false;
+    }
+    vector<TrieNode*> chs;
+    bool end;
+};
+
+class Trie {
+public:
+    TrieNode *root;
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(string word) {
+        TrieNode *rt = root;
+        int n = word.size();
+        for (int i = 0; i < n; i++) {
+            int ii = word[i] - 'a';
+            if (!rt->chs[ii]) rt->chs[ii] = new TrieNode();
+            rt = rt->chs[ii];
+        }
+        rt->end = true;    
+    }
+    
+    bool search(string word) {
+        int n = word.size();
+        TrieNode *rt = root;
+        for (int i = 0; i < n; i++) {
+            int ii = word[i] - 'a';
+            if (!rt->chs[ii]) return false;
+            rt = rt->chs[ii];
+        }
+        return rt->end;  
+    }
+    
+    int startsWith(string p) {
+        int n = p.size();
+        TrieNode *rt = root;
+        for (int i = 0; i < n; i++) {
+            int ii = p[i] - 'a';
+            if (!rt->chs[ii]) return 0;
+            if (rt->chs[ii]->end) return i + 1; 
+            rt = rt->chs[ii];
+        }
+        return (rt->end ? n : 0);
+    }
+};
+
+
+std::vector<std::string> splitString(const std::string& s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::stringstream ss(s); 
+
+    while (std::getline(ss, token, delimiter)) { 
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
+class Solution {
+public:
+    string replaceWords(vector<string>& dictionary, string sentence) {
+        vector<string> ans;
+        Trie t;
+        for (auto root : dictionary) t.insert(root);
+
+        for (auto c : splitString(sentence, ' ')) {
+            int idx = t.startsWith(c);
+            if (idx) {
+                ans.push_back(c.substr(0, idx));
+            } else ans.push_back(c);
+        }
+        
+        string rs = "";
+        for (auto c : ans) rs = (rs.size() ? rs + " " : "") +  c;
+        return rs;
+    }
+};
