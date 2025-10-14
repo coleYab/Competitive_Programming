@@ -1,0 +1,70 @@
+# Problem: Sum of Prefix Scores of Strings - https://leetcode.com/problems/sum-of-prefix-scores-of-strings/description/
+
+
+struct TrieNode {
+    TrieNode() {
+        for (int i = 0; i < 26; i++) chs[i] = nullptr;
+        // chs.assign(26, nullptr);
+        cnt = 0;
+        end = false;
+    }
+    TrieNode* chs[26];
+    int cnt = 0;
+    bool end;
+};
+
+class Trie {
+public:
+    TrieNode *root;
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(string word) {
+        TrieNode *rt = root;
+        int n = word.size();
+        for (int i = 0; i < n; i++) {
+            int ii = word[i] - 'a';
+            if (!rt->chs[ii]) rt->chs[ii] = new TrieNode();
+            rt = rt->chs[ii];
+            rt->cnt++;
+        }
+        rt->end = true;    
+    }
+    
+    bool search(string word) {
+        int n = word.size();
+        TrieNode *rt = root;
+        for (int i = 0; i < n; i++) {
+            int ii = word[i] - 'a';
+            if (!rt->chs[ii]) return false;
+            rt = rt->chs[ii];
+        }
+        return rt->end;  
+    }
+    
+    int startsWith(string p) {
+        int n = p.size();
+        int ans = 0;
+        TrieNode *rt = root;
+        for (int i = 0; i < n; i++) {
+            int ii = p[i] - 'a';
+            rt = rt->chs[ii];
+            ans += rt->cnt;
+        }
+    
+        return ans;
+    }
+};
+
+
+class Solution {
+public:
+    vector<int> sumPrefixScores(vector<string>& words) {
+        Trie t;
+        for (auto it : words) t.insert(it);
+        vector<int> ans;
+        for (auto it : words) ans.push_back(t.startsWith(it));
+        return ans;    
+      }
+};
