@@ -1,0 +1,44 @@
+# Problem: Bear and Poker - https://codeforces.com/problemset/problem/574/C
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// #define multi
+#define int long long
+
+const int mod = 1e9 + 7;
+
+struct test {
+    void solve() {
+        int n; cin >> n;
+        vector<int> a(n);
+        for (auto &it : a) {
+            cin >> it;
+            while (it % 3 == 0) it /= 3;
+            while (it % 2 == 0) it /= 2;
+        }
+
+        // for (auto &it : a) cout << it << " ";
+        // cout << endl;
+
+        bool ok = true;
+        for (int i = 1; i < n; i++) {
+            if (a[i] != a[i - 1]) ok = false;
+        }
+        cout << (ok ? "YES" : "NO") << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int tt = 1;
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+ 
