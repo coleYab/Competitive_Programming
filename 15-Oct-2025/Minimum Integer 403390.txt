@@ -1,0 +1,36 @@
+# Problem: Minimum Integer - https://codeforces.com/problemset/problem/1101/A
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define multi
+#define int long long
+
+const int mod = 1e9 + 7;
+
+struct test {
+    void solve() {
+        int l, r, d; cin >> l >> r >> d;
+        int c = (r / d) + 1;
+        if (d < l) {
+            cout << d << endl;
+            return;
+        }
+        
+        cout << (c * d) << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int tt = 1;
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+ 
