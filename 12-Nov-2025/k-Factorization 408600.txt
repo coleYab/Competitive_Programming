@@ -1,0 +1,82 @@
+# Problem: k-Factorization - https://codeforces.com/problemset/problem/797/A
+
+#include <bits/stdc++.h>
+#include <cmath>
+
+using namespace std;
+
+#ifdef DEBUG
+#include "/home/user/.competitive/templates/include/debug.h"
+#define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", _print(__VA_ARGS__); cerr << endl;
+#else
+#define dbg(...)
+#endif
+
+const int MOD = 1e9 + 7;
+#define int long long
+
+const int inf = numeric_limits<int>::max();
+const int ninf = numeric_limits<int>::min();
+
+// int _sqrt(int n) {
+//     int rs = std::sqrtl(n);
+//     while (rs * rs < n) rs++;
+//     while (rs * rs > n) rs--;
+//     return rs;
+// }
+
+const int mxn = 1e5+100;
+vector<bool> primes(mxn, true);
+vector<int> ps;
+// #define multi
+void init() {
+    for (int i = 2; i < mxn; i++) {
+        if (!primes[i]) continue;
+        ps.push_back(i);
+        for (int j = i + i; j < mxn; j += i) {
+            primes[i] = false;
+        }
+    }
+}
+struct test {
+    void solve() {
+        int n, m; cin >> n >> m;
+        int cnt = 0;
+        vector<int> ans;
+        for (auto it : ps) {
+            if (n % it) continue;
+            cnt += 1;
+            while (n % it == 0) {
+                if (ans.size() == m - 1) {
+                    ans.push_back(n);
+                    break;
+                }
+                ans.push_back(it);
+                n /= it;
+            }
+
+            if (ans.size() == m) break;
+        }
+
+
+        if (ans.size() != m) {
+            cout << -1 << endl;
+            return;
+        }
+        for (auto it : ans) cout << it << " ";
+        cout << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false); cin.tie(NULL);
+    int tt = 1;
+    init();
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+
