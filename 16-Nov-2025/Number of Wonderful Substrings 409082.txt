@@ -1,0 +1,15 @@
+# Problem: Number of Wonderful Substrings - https://leetcode.com/problems/number-of-wonderful-substrings/
+
+class Solution {
+public:
+    long long wonderfulSubstrings(string word) {
+        int count[1024] = {1}, mask = 0;
+        long long res = 0;
+        for(int i = 0, n = word.length(); i < n; ++i){
+            mask ^= (1 << (word[i] - 'a'));
+            res += count[mask]++;
+            for(int k = 0; k < 10; ++k) res += count[mask ^ (1 << k)];
+        }
+        return res;
+    }
+};
