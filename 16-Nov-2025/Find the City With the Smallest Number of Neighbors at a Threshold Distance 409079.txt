@@ -1,0 +1,64 @@
+# Problem: Find the City With the Smallest Number of Neighbors at a Threshold Distance - https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/
+
+
+
+const int inf = numeric_limits<int>::max();
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int dt) {
+        vector<pair<int,int>> adj[105];
+        vector<pair<int,int>> ans;
+
+        for (auto &e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            adj[u].push_back({v, w});
+            adj[v].push_back({u, w});
+        }
+
+        for (int src = 0; src < n; src++) {
+
+            priority_queue<
+                pair<int,int>, 
+                vector<pair<int,int>>, 
+                greater<pair<int,int>>
+            > pq;
+
+            vector<int> dist(n, inf);
+            dist[src] = 0;
+            pq.push({0, src});
+
+            while (!pq.empty()) {
+                auto [prevDist, prev] = pq.top();
+                pq.pop();
+
+                for (auto &it : adj[prev]) {
+                    int next = it.first;
+                    int nextDist = it.second;
+
+                    if (dist[next] > dist[prev] + nextDist) {
+                        dist[next] = dist[prev] + nextDist;
+                        pq.push({dist[next], next});
+                    }
+                }
+            }
+
+            int cnt = 0;
+            for (int i = 0; i < n; i++) {
+                if (i != src && dist[i] <= dt)
+                    cnt++;
+            }
+
+            ans.push_back({cnt, src});
+        }
+
+        sort(ans.begin(), ans.end(),
+            [](const pair<int,int>& a, const pair<int,int>& b) {
+                if (a.first != b.first)
+                    return a.first < b.first; 
+                return a.second > b.second;  
+            }
+        );
+
+        return ans[0].second;
+    }
+};
