@@ -1,0 +1,85 @@
+# Problem: Word Break - https://leetcode.com/problems/word-break/description/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct Node {
+  vector<Node *> cnt;
+  bool end;
+  Node() {
+    cnt.assign(26, nullptr);
+    end = false;
+  }
+};
+
+struct Trie {
+  Node *root;
+  Trie() { root = new Node(); }
+
+  void insert(string w) {
+    int n = w.size();
+    Node *rt = root;
+    for (int i = 0; i < n; i++) {
+      int cur = w[i] - 'a';
+      if (!rt->cnt[cur])
+        rt->cnt[cur] = new Node();
+      rt = rt->cnt[cur];
+    }
+    rt->end = true;
+  }
+
+  bool has(string w) {
+    int n = w.size();
+    Node *rt = root;
+    for (int i = 0; i < n; i++) {
+      int cur = w[i] - 'a';
+      if (!rt->cnt[cur])
+        return false;
+      rt = rt->cnt[cur];
+    }
+
+    return rt->end;
+  }
+};
+
+class Solution {
+public:
+  int n;
+  string t;
+  Trie trie;
+  vector<int> vis;
+  vector<bool> ans;
+
+  bool dfs(int idx) {
+    bool rs = false;
+    string s = "";
+
+    if (idx >= n)
+      return true;
+
+    if (vis[idx] != -1)
+      return ans[idx];
+    vis[idx] = 1;
+
+    for (int i = idx; i < n; i++) {
+      s += t[i];
+      if (trie.has(s))
+        rs = rs || dfs(i + 1);
+    }
+
+    return ans[idx] = rs;
+  }
+
+  bool wordBreak(string s, vector<string> &wordDict) {
+    n = s.size();
+    t = s;
+    vis.assign(n, -1);
+    ans.assign(n, false);
+
+    for (auto word : wordDict)
+      trie.insert(word);
+    return dfs(0);
+  }
+};
+
