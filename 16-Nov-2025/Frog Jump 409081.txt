@@ -1,0 +1,24 @@
+# Problem: Frog Jump - https://leetcode.com/problems/frog-jump/
+
+class Solution {
+public:
+    map<pair<int,int>, bool> dp;
+
+    bool canCross(vector<int>& a, int idx = 0, int k = 0) {
+        if (idx == a.size() - 1) return true;
+
+        if (dp.count({idx, k})) return dp[{idx, k}];
+
+        for (int i = idx + 1; i < a.size(); i++) {
+            int gap = a[i] - a[idx];
+
+            if (gap < k - 1) continue;
+            if (gap > k + 1) break;
+
+            if (canCross(a, i, gap))
+                return dp[{idx, k}] = true;
+        }
+
+        return dp[{idx, k}] = false;
+    }
+};
