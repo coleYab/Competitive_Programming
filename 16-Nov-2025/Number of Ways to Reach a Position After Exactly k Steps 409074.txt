@@ -1,0 +1,146 @@
+# Problem: Number of Ways to Reach a Position After Exactly k Steps - https://leetcode.com/problems/number-of-ways-to-reach-a-position-after-exactly-k-steps/
+
+template <typename Int, Int Modulus> class mint {
+    static_assert(std::is_integral<Int>::value, "Int must be an integral type");
+ 
+public:
+    typedef Int value_type;
+ 
+    static constexpr value_type mod() noexcept { return Modulus; }
+ 
+    mint() noexcept : val(0) {}
+ 
+    template <typename U> mint(U x) noexcept { val = normalize(x); }
+ 
+    value_type value() const noexcept { return val; }
+ 
+    template <typename U> explicit operator U() const noexcept {
+        return static_cast<U>(val);
+    }
+ 
+    mint &operator+=(const mint &rhs) noexcept {
+        val += rhs.val;
+        if (val >= Modulus)
+            val -= Modulus;
+        return *this;
+    }
+ 
+    mint &operator-=(const mint &rhs) noexcept {
+        val -= rhs.val;
+        if (val < 0)
+            val += Modulus;
+        return *this;
+    }
+ 
+    mint &operator*=(const mint &rhs) noexcept {
+        val = normalize(static_cast<int64_t>(val) * rhs.val);
+        return *this;
+    }
+ 
+    mint &operator/=(const mint &rhs) { return *this *= rhs.inv(); }
+ 
+    mint operator-() const noexcept {
+        return val == 0 ? mint(0) : mint(Modulus - val);
+    }
+ 
+    mint &operator++() noexcept { return *this += 1; }
+    mint &operator--() noexcept { return *this -= 1; }
+    mint operator++(int) noexcept {
+        mint tmp = *this;
+        ++(*this);
+        return tmp;
+    }
+    mint operator--(int) noexcept {
+        mint tmp = *this;
+        --(*this);
+        return tmp;
+    }
+ 
+    mint inv() const { return pow(*this, Modulus - 2); }
+ 
+    template <typename Exp> static mint pow(mint base, Exp exp) {
+        assert(exp >= 0);
+        mint result = 1;
+        while (exp) {
+            if (exp & 1)
+                result *= base;
+            base *= base;
+            exp >>= 1;
+        }
+        return result;
+    }
+ 
+    friend bool operator==(const mint &a, const mint &b) noexcept {
+        return a.val == b.val;
+    }
+ 
+    friend bool operator!=(const mint &a, const mint &b) noexcept {
+        return !(a == b);
+    }
+ 
+    friend bool operator<(const mint &a, const mint &b) noexcept {
+        return a.val < b.val;
+    }
+ 
+    friend bool operator>(const mint &a, const mint &b) noexcept { return b < a; }
+ 
+    friend bool operator<=(const mint &a, const mint &b) noexcept {
+        return !(a > b);
+    }
+ 
+    friend bool operator>=(const mint &a, const mint &b) noexcept {
+        return !(a < b);
+    }
+ 
+    friend std::ostream &operator<<(std::ostream &os, const mint &m) {
+        return os << m.val;
+    }
+ 
+    friend std::istream &operator>>(std::istream &is, mint &m) {
+        int64_t x;
+        is >> x;
+        m = mint(x);
+        return is;
+    }
+ 
+    value_type raw() const noexcept { return val; }
+ 
+private:
+    value_type val;
+ 
+    template <typename U> static value_type normalize(U x) noexcept {
+        value_type r = static_cast<value_type>(x % Modulus);
+        return r < 0 ? r + Modulus : r;
+    }
+};
+ 
+template <typename Int, Int Modulus>
+mint<Int, Modulus> operator+(mint<Int, Modulus> a, const mint<Int, Modulus>& b) { a += b; return a; }
+ 
+template <typename Int, Int Modulus>
+mint<Int, Modulus> operator-(mint<Int, Modulus> a, const mint<Int, Modulus>& b) { a -= b; return a; }
+ 
+template <typename Int, Int Modulus>
+mint<Int, Modulus> operator*(mint<Int, Modulus> a, const mint<Int, Modulus>& b) { a *= b; return a; }
+ 
+template <typename Int, Int Modulus>
+mint<Int, Modulus> operator/(mint<Int, Modulus> a, const mint<Int, Modulus>& b) { a /= b; return a; }
+ 
+ 
+const int MOD = 1e9+7;
+using Mint = mint<int, MOD>;
+
+Mint dp[1001][1001] = {};
+
+class Solution {
+public:
+    int numberOfWays(int startPos, int endPos, int k) {
+    if (dp[1][1] == 0)
+        for (int k = 1; k <= 1000; ++k) {
+            dp[k][k] = 1;
+            for (int i = 0; i < k; ++i)
+                dp[k][i] = (dp[k - 1][abs(i - 1)] + dp[k - 1][i + 1]);
+        }
+    return dp[k][abs(startPos - endPos)].value();
+    }
+};
