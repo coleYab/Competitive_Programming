@@ -1,0 +1,55 @@
+# Problem: Number of Parallelograms - https://codeforces.com/contest/660/problem/D
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#ifdef DEBUG
+#include "/home/user/.competitive/templates/include/debug.h"
+#define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", _print(__VA_ARGS__); cerr << endl;
+#else
+#define dbg(...)
+#endif
+
+const int MOD = 1e9 + 7;
+#define int long long
+
+const int inf = numeric_limits<int>::max();
+const int ninf = numeric_limits<int>::min();
+
+// #define multi
+struct test {
+    void solve() {
+        int n;
+        cin >> n;
+        vector<int> x(n), y(n);
+        map<pair<int, int>, int> cnt;
+        for (int i = 0; i < n; i++) cin >> x[i] >> y[i];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                int cx = x[i] + x[j];
+                int cy = y[i] + y[j];
+                cnt[{cx, cy}]++;
+            }
+        }
+        int ans = 0;
+        for (auto &it : cnt) {
+            int cur = it.second;
+            cur = (cur * (cur - 1)) / 2;
+            ans += cur;
+        }
+        cout << ans << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false); cin.tie(NULL);
+    int tt = 1;
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+
