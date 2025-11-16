@@ -1,0 +1,68 @@
+# Problem: The Two Routes - https://codeforces.com/problemset/problem/601/A
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#ifdef DEBUG
+#include "/home/user/.competitive/templates/include/debug.h"
+#define dbg(...) cerr << "[" << #__VA_ARGS__ << "] = ", _print(__VA_ARGS__); cerr << endl;
+#else
+#define dbg(...)
+#endif
+
+const int MOD = 1e9 + 7;
+#define int long long
+
+const int inf = numeric_limits<int>::max();
+const int ninf = numeric_limits<int>::min();
+
+// #define multi
+struct test {
+    void solve() {
+        int n, m; 
+        cin >> n >> m;
+        vector<vector<int>> a(n + 1, vector<int>(n + 1, 0));
+        vector<int> d(401);
+        for (int i = 1; i <= m; i++) {
+            int x, y; cin >> x >> y;
+            a[x][y] = a[y][x] = 1;
+        }
+
+        if (m == 0 || m == (n * (n + 1)) / 2) {
+            cout << -1 << endl;
+            return;
+        }
+
+        queue<int> q;
+        q.push(1);
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            if (u == n) {
+                cout << d[n] << endl;
+                return;
+            }
+
+            for (int i = 2; i <= n; i++) {
+                if (!d[i] && a[u][i] != a[1][n]) {
+                    d[i] = d[u] + 1;
+                    q.push(i);
+                }
+            }
+        }
+        cout << -1 << endl;
+    }
+};
+
+int32_t main() {
+    ios::sync_with_stdio(false); cin.tie(NULL);
+    int tt = 1;
+#ifdef multi
+    cin >> tt;
+#endif
+    while (tt--) {
+        test().solve();
+    }
+}
+
